@@ -15,7 +15,7 @@ app.secret_key = os.urandom(12)  # Generic key for dev purposes only
 
 
 stripe_keys = {
-  'secret_key': "sk_test_DNesneMw03u6msRRwDN66lb6001kRscmfg",
+  'secret_key': "sk_test_DNesneMw03u6msRRwDN66lb6001kRscmfg",  # Killian's keys, I should put this in an environment variable
   'publishable_key': "pk_test_Eoego2U3SSlSNqCCMcKA7Sxx00urEsAkYE"
 }
 
@@ -94,7 +94,7 @@ def settings():
 def charge():
 
     # amount in cents
-    amount = 500
+    amount = 500  # I don't know how much the pricing should be ...
 
     customer = stripe.Customer.create(
         email=request.form['stripeEmail'],
