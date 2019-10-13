@@ -82,12 +82,12 @@ def logout():
 
 @app.route('/analyze', methods=['POST'])
 async def analyze(request):
-    img_data = await request.form()
-    img_bytes = await (img_data['file'].read())
-    img = open_image(BytesIO(img_bytes))
-    prediction = learn.predict(img)[0]
+#    img_data = await request.form()
+#    img_bytes = await (img_data['file'].read())
+#    img = open_image(BytesIO(img_bytes))
+#    prediction = learn.predict(img)[0]
 
-    return render_template('image_upload.html', predictions=prediction)
+    return render_template('image_upload.html', predictions="Fake")
 
     #return JSONResponse({'result': str(prediction)})
 
