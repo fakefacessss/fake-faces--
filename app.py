@@ -8,6 +8,7 @@ import aiohttp
 import asyncio
 import uvicorn
 import stripe
+from keras.preprocessing import image
 from fastai import *
 from fastai.vision import *
 from io import BytesIO
@@ -20,12 +21,25 @@ from scripts import forms
 from scripts import helpers
 from flask import Flask, redirect, url_for, render_template, request, session
 
+export_file_url = 'https://drive.google.com/uc?export=download&id=1-Rlv4jsQa0XGsDNMvadntQhQj5r93sj-'
 export_file_name = 'export.pkt'
+
+
+ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 classes = ['fake', 'real']
 path = Path(__file__).parent
 
+async def download_file(url, dest):
+    if dest.exists(): return
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            data = await response.read()
+            with open(dest, 'wb') as f:
+                f.write(data)
+
 async def setup_learner():
+    await download_file(export_file_url, path / export_file_name)
     try:
         learn = load_learner(path, export_file_name)
         return learn
@@ -36,6 +50,25 @@ async def setup_learner():
             raise RuntimeError(message)
         else:
             raise
+
+
+loop = asyncio.get_event_loop()
+tasks = [asyncio.ensure_future(setup_learner())]
+learn = loop.run_until_complete(asyncio.gather(*tasks))[0]
+loop.close()
+
+
+def load_image(img_path):
+  img = image.load_img(img_path, target_size=(128, 128, 3))
+  img = image.img_to_array(img)
+  #mg = np.expand_dims(img, axis=0)
+  img /= 255.
+  img = pil2tensor(img,dtype= np.float32)
+  return img
+
+def allowed_file(filename):
+	return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 app = Flask(__name__)
 app.secret_key = os.urandom(12)  # Generic key for dev purposes only
@@ -80,14 +113,44 @@ def logout():
 
 
 
-@app.route('/analyze', methods=['POST'])
-async def analyze(request):
-    img_data = await request.form()
-    img_bytes = await (img_data['file'].read())
-    img = open_image(BytesIO(img_bytes))
-    prediction = learn.predict(img)[0]
+@app.route('/analyze', methods=['POST', 'GET'])
 
-    return render_template('image_upload.html', predictions=prediction)
+
+
+
+
+#async def analyze(request):
+#
+#    img_data = await request.form()
+#    img_bytes = await (img_data['file'].read())
+#    img = open_image(BytesIO(img_bytes))
+#    prediction = learn.predict(img)[0]
+#
+#    return render_template('image_upload.html', predictions=prediction)
+
+
+
+def analyze():
+
+    if 'file' not in request.files:
+    	return render_template('image_upload.html', predictions=[])
+
+    file = request.files['file']
+
+    if file.filename == '':
+    	return render_template('image_upload.html', predictions=[])
+
+    if file and allowed_file(file.filename):
+        image = load_image(file)
+        print("The image was loaded")
+        prediction = learn.predict(Image(image))[0]
+
+        print("The prediction was made")
+        print(prediction)
+        return render_template('image_upload.html', predictions=prediction )
+
+    return render_template('image_upload.html', predictions=[])
+
 
     #return JSONResponse({'result': str(prediction)})
 

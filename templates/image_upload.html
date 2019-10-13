@@ -12,11 +12,26 @@
                     <center><input type="file" name="file" onchange="readURL(this);" /></center><br>
                     <div><center><button type="submit" class="button">Predict</button></center></div>
                     {% if predictions.length != 0 %}
-                      <canvas style="margin-top: 30px;" id="predictions-chart" width="400" height="250"></canvas>
+
 
                       <!-- we should display the result here -->
+                      <br>
+                      <div class="results">
+                        <center>
+                          <h4> The image is {{ predictions }}</h4>
+
+                        </center>
+
+
+
+
+                        </div>
+
+
 
                     {% endif %}
+
+
                 </div>
             </form>
         </div>
