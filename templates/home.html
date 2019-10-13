@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% block body %}
+{% include "navbar.html" %}
+<section class="hero is-primary is-bold is-large">
+
+<div class="hero-body">
+  <div class="container has-text-centered">
+
+    <div class="columns">
+      <div class="column is-auto">
+
+        <center>
+        <img src="/static/img/fake_faces_logo.png" width="600" height="350">
+
+        <!-- Here we should write something about the product, the options etc-->
+
+
+         </center>
+        <p class="title is-2">Flaskex</p>
+        <p class="subtitle is-4"><i>Simple example for rapid prototyping</i></p>
+        <p class="subtitle is-5">&#x2022 Encrypted user authorizaton</p>
+        <p class="subtitle is-5">&#x2022 Ready to go database system</p>
+        <p class="subtitle is-5">&#x2022 User login, signup, and settings</p>
+      </div>
+
+      <div class="column is-auto">
+        <h2>Buy for $5.00</h2>
+        <form action="/charge" method="post">
+          <script
+            src="https://checkout.stripe.com/checkout.js"
+            class="stripe-button"
+            data-key="{{ key }}"
+            data-description="A Flask Charge"
+            data-amount="500"
+            data-locale="auto">
+          </script>
+        </form>
+
+      </div>
+
+
+    </div>
+
+
+  </div>
+</div>
+
+
+
+
+
+
+</section>
+
+
+
+{% endblock %}
+
+{% block content %}
+
+{% endblock %}
+
+{% block scripts %}
+<script src="../static/js/scripts.js"></script>
+{% endblock %}
