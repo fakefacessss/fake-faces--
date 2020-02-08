@@ -6,6 +6,7 @@ requests
 flask-heroku
 gunicorn
 tensorflow
+pillow==6.1
 aiofiles==0.4.0
 aiohttp==3.5.4
 asyncio==3.4.3
