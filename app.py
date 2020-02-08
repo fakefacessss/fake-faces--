@@ -75,8 +75,8 @@ app.secret_key = os.urandom(12)  # Generic key for dev purposes only
 
 
 stripe_keys = {
-  'secret_key': "sk_test_DNesneMw03u6msRRwDN66lb6001kRscmfg",  # Killian's keys, I should put this in an environment variable
-  'publishable_key': "pk_test_Eoego2U3SSlSNqCCMcKA7Sxx00urEsAkYE"
+  'secret_key': "sk_test_j1cTyFx2AT75lGhGqTxIzRkl00RVplFhK3",
+  'publishable_key': "pk_test_zfscr65Y5Is9xZFL0jMXwmhm00xUH1xXn0"
 }
 
 stripe.api_key = stripe_keys['secret_key']
